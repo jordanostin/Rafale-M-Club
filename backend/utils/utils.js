@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import path from 'path';
 import fs from 'fs';
 
@@ -25,5 +24,7 @@ export const copyFiles = (files, pathName) => {
         });
 
     });
+
+    return Promise.all(promises);
 
 };
