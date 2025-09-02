@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const mediaSchema = mongoose.Schema({
+const mediaSchema = new mongoose.Schema({
 
     title: {
         type: String,
