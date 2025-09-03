@@ -13,7 +13,7 @@ export const register = (req, res) => {
 
     const nameRegex = /^[a-zA-Z0-9\- ]+$/;
 
-    if(!nameRegex.test(lastName) && !nameRegex.test(firstName)){
+    if(!nameRegex.test(lastName) || !nameRegex.test(firstName)){
 
         return res.status(400).json({message: 'The name cannot contain special characters.'})
 
@@ -57,7 +57,7 @@ export const register = (req, res) => {
     })
     .catch((err) => {
 
-        return res.status(400).json({message: 'Error server'});
+        return res.status(400).json({message: 'Error server', err});
 
     })
 };
