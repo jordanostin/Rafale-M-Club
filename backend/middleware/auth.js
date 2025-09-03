@@ -3,7 +3,7 @@ import User from '../models/userSchema.js'
 
 const verifyToken = (req, res, next) => {
 
-    const header = req.header.authorization;
+    const header = req.headers.authorization;
     const token = header && header.split(' ')[1];
 
     if(!token){
@@ -12,11 +12,11 @@ const verifyToken = (req, res, next) => {
 
     };
 
-    jwt.verify(token, process.env.JWT, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
 
         if(err){
 
-            return res.status(403).json({message: 'Unauthorized'});
+            return res.status(403).json({message: 'Invalid or expired token'});
 
         };
 
@@ -30,24 +30,27 @@ const verifyToken = (req, res, next) => {
 
 // Si les visiteurs doivent créer un compte pour commenter les articles et tout au moins on a déjà le isAdmin
 
-const isAdmin = (req, res, next) => {
+const isAdmin = async (req, res, next) => {
 
-    User.findOne({_id: req.userId})
+    try{
 
-        then((user) =>{
+        const user = await User.findById(req.userId);
 
-            if(user.isAdmin){
+        if(user && user.isAdmin){
 
-                next();
+            next();
 
-            } else {
+        } else {
 
-                return res.status(401).json({message: 'Unauthorized'});
+            return res.status(403).json({message: 'Acces denied: Admins only'});
 
-            };
+        }
 
-        })
-        .catch((err) => res.status(401).json({message: 'Unauthorized'}))
+    } catch(err) {
+
+        return res.status(401).json({message: 'Unauthorized'});
+
+    };
 
 };
 
