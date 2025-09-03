@@ -32,38 +32,56 @@ const userSchema = new mongoose.Schema({
 
     isAdmin: {
         type: Boolean,
-        default: true,
+        default: false,
     }
 
 },{
     timestamps: true,
 });
 
+
+// Hash le mdp
+
 userSchema.pre('save', async function () {
+
+    if(!this.isModified('passeword')){
+
+        return next();
+
+    }
         
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
 
+    next();
+
 });
 
-userSchema.statics.decodeJWT = async function () {
+
+
+// Compare le mdp
+
+userSchema.methods.comparePassword = async (candidatePassword) =>{
+
+    return await bcrypt.compare(candidatePassword, this.password);
+
+};
+
+
+// Creation du JWT
+
+
+
+userSchema.statics.decodeJWT = async () =>{
     
-    try {
-        
-        const decode = jwt.verify(TokenExpiredError, process.env.JWT);
-        const user = await this.findOne({email: decode.email});
+    return jwt.sign(
 
-        if (!user){
-            console.log('User not found');
-        }
+        {_id: this._id, email: this.email, isAdmin: this.isAdmin},
+        process.env.JWT_SECRET,
+        {expiresIn: '1d'} // expire en 1 jour
 
-        return user;
+    );
 
-    } catch(err) {
-
-        console.log('JWT decoding error');
-
-    }
 };
 
 export default mongoose.model('User', userSchema);
