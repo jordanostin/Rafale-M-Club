@@ -61,3 +61,67 @@ export const register = (req, res) => {
 
     })
 };
+
+
+// Login
+
+export const login = async (req, res) =>{
+
+    try{
+
+        const {email, password} = req.body;
+
+        const user = await User.findOne({email});
+
+        if(!user){
+
+            return res.status(400).json({message: 'User not found'});
+
+        };
+
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if(!isMatch){
+
+            return res.status(400).json({message: 'Invalid credentials'});
+
+        }
+
+
+        const token = jwt.sign(
+
+            {
+
+                _id: user._id,
+                email: user.email,
+                isAdmin: user.isAdmin,
+
+            },
+            process.env.JWT_SECRET,
+            { expiredIn: '1d'} // expire en 1 jour
+            
+        );
+
+
+        const safeUser = {
+
+            id: user._id,
+            lastName: user.lastName,
+            firstName: user.firstName,
+            nickName: user.nickName,
+            email: user.email,
+            isAdmin: user.isAdmin
+
+        }
+
+        res.status(200).json({user: safeUser, token});
+
+    } catch(err) {
+
+        console.error(err);
+        res.status(500).json({message: 'Error server', err: err.message});
+
+    }
+
+};
