@@ -1,8 +1,6 @@
 import User from '../models/userSchema.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { use } from 'react';
-import { isAbsolute } from 'path';
 
 
 // S'enregistrer
@@ -26,7 +24,8 @@ export const register = (req, res) => {
         nickName,
         email,
         password,
-        isAdmin: email == 'jordan.ostin@outlook.fr',
+        isAdmin: false,
+        isActive: false,
         createdAt: Date.now(),
 
     });
@@ -46,11 +45,12 @@ export const register = (req, res) => {
                 email: user.email,
                 id: user._id,
                 isAdmin: user.isAdmin,
+                isActive: user.isActive,
                 createdAt: user.createdAt
 
             },
 
-            token
+            message: 'Account created. Waiting for admin approval before login'
 
         });
 
@@ -85,6 +85,12 @@ export const login = async (req, res) =>{
         if(!isMatch){
 
             return res.status(400).json({message: 'Invalid credentials'});
+
+        }
+
+        if(!user.isActive){
+
+            return res.status(403).json({message: 'Account not yet approved by admin'});
 
         }
 
