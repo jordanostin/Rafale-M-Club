@@ -1,23 +1,26 @@
 import './App.css';
+import { Header } from './component/Header.js';
+import { Navbar } from './component/Navbar.js';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src='/logoMClub.png' className="App-logo" alt="logo" />
-        <p>
-          Coming Soon
-        </p>
-        Pour plus d'info 
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Cliquez ici
-        </a>
-      </header>
+      <Navbar />
+      <Header />
+
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      <p>Lorem ipsum fsfsdfsdfsfsfsfs</p>
+      
     </div>
   );
 }

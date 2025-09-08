@@ -1,0 +1,71 @@
+@use './_variables.scss' as *;
+
+.navbar {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 24px;
+    background: rgba(10, 15, 28, 0.85);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    box-sizing: border-box;
+
+    &_logo img {
+        height: 80px;
+        width: auto;
+        display: block;
+    }
+
+    &_links{
+
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        gap: 32px;
+        color: $text-light;
+        transition: color 0.3s;
+
+        li {
+            
+            a{
+
+                text-decoration: none;
+                font-size: 16px;
+                color: $text-light;
+                transition: color 0.3s;
+
+                &:hover{
+                    color: lighten($text-light, 20%);
+                }
+            }
+        }
+    }
+
+    &_cta {
+
+        flex: 0 0 auto;
+        padding: 8px 18px;
+        border: none;
+        border-radius: 4px;
+        background: $accent-color;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+
+        &:hover{
+            background: darken($accent-color, 10%);
+        }
+    }
+}
