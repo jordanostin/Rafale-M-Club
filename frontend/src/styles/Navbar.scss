@@ -8,8 +8,8 @@
     right: 0;
     height: 60px;
 
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
 
     padding: 0 24px;
@@ -18,17 +18,21 @@
     z-index: 1000;
     box-sizing: border-box;
 
-    &_logo img {
-        height: 80px;
-        width: auto;
-        display: block;
+    &_logo {
+
+        justify-self: start;
+
+        img {
+
+            height: 60px;
+            width: auto;
+            display: block;
+        }
+
     }
 
     &_links{
 
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
         display: flex;
         justify-content: center;
         list-style: none;
@@ -54,7 +58,7 @@
 
     &_cta {
 
-        flex: 0 0 auto;
+        justify-self: end;
         padding: 8px 18px;
         border: none;
         border-radius: 4px;

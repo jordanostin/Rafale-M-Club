@@ -18,6 +18,7 @@ export const Navbar = () => {
                 <li><a href='#home'>Accueil</a></li>
                 <li><a href='#about'>À propos</a></li>
                 <li><a href='#pilots'>Nos pilotes</a></li>
+                <li><a href='#pilots'>Nos avions</a></li>
                 <li><a href='#events'>Événements</a></li>
                 <li><a href='#contact'>Contact</a></li>
 
