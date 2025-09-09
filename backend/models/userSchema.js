@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema({
     isActive:{
         type: Boolean,
         default: false,
+    },
+    approved:{
+        type: Boolean,
+        default: false,
     }
 
 },{

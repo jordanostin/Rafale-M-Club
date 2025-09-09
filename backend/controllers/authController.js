@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt';
 
 // S'enregistrer
 
-export const register = (req, res) => {
+export const register = async (req, res) => {
 
-    const {lastName, firstName, nickName, email, password } = req.body;
+    const {lastName, firstName, nickName, email, password} = req.body;
 
     const nameRegex = /^[a-zA-Z0-9\- ]+$/;
 
@@ -17,24 +17,39 @@ export const register = (req, res) => {
 
     };
 
-    const user = new User({
+    try {
 
-        lastName,
-        firstName,
-        nickName,
-        email,
-        password,
-        isAdmin: false,
-        isActive: false,
-        createdAt: Date.now(),
+        const existingUser = await User.findOne({ email });
 
-    });
+        if(existingUser) {
 
-    const token = user.createJWT();
+            return res.status(400).json({message : 'Email already exist'});
 
-    user.save()
-    .then(() =>{
+        };
+
+        const adminExist = await User.findOne({isAdmin : true});
         
+        const isAdmin = !adminExist;
+
+        const isActive = isAdmin ? true : false;
+
+        const user = new User({
+
+            lastName,
+            firstName,
+            nickName,
+            email,
+            password,
+            isAdmin,
+            isActive,
+            createdAt: Date.now(),
+
+        });
+
+        await user.save()
+
+        const token = user.createJWT();
+
         res.status(201).json({
 
             user:{
@@ -50,16 +65,20 @@ export const register = (req, res) => {
 
             },
 
-            message: 'Account created. Waiting for admin approval before login'
+            message: isActive 
+                ? 'Admin account created and automatically approved' 
+                : 'Account created. Waiting for admin approval before login'
 
         });
 
-    })
-    .catch((err) => {
 
-        return res.status(400).json({message: 'Error server', err});
 
-    })
+    } catch(err) {
+
+        return res.status(500).json({message : 'Server Error', err})
+
+    }
+        
 };
 
 
@@ -105,7 +124,7 @@ export const login = async (req, res) =>{
 
             },
             process.env.JWT_SECRET,
-            { expiredIn: '1d'} // expire en 1 jour
+            { expiresIn: '1d'} // expire en 1 jour
             
         );
 
