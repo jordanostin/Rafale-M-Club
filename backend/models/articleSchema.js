@@ -42,4 +42,4 @@ const articleSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.models('Article', articleSchema);
+export default mongoose.model('Article', articleSchema);

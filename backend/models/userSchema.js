@@ -47,9 +47,9 @@ const userSchema = new mongoose.Schema({
 
 // Hash le mdp
 
-userSchema.pre('save', async function () {
+userSchema.pre('save', async function (next) {
 
-    if(!this.isModified('passeword')){
+    if(!this.isModified('password')){
 
         return next();
 
@@ -66,7 +66,7 @@ userSchema.pre('save', async function () {
 
 // Compare le mdp
 
-userSchema.methods.comparePassword = async (candidatePassword) =>{
+userSchema.methods.comparePassword = async function (candidatePassword) {
 
     return await bcrypt.compare(candidatePassword, this.password);
 
@@ -75,9 +75,7 @@ userSchema.methods.comparePassword = async (candidatePassword) =>{
 
 // Creation du JWT
 
-
-
-userSchema.statics.decodeJWT = async () =>{
+userSchema.methods.createJWT = function () {
     
     return jwt.sign(
 
